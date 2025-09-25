@@ -638,7 +638,7 @@
                     <os arch="x86_64" />
                 </or>
                 <or>
-                    <!-- Linux check requires a wildcare since it was not proeprly detecting all linux flavors -->
+                    <!-- Linux check requires a wildcard since it was not properly detecting all linux flavors -->
                     <os name="linux*" />
                     <os family="windows" />
                 </or>
