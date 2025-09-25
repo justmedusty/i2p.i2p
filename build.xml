@@ -638,7 +638,8 @@
                     <os arch="x86_64" />
                 </or>
                 <or>
-                    <os name="Linux" />
+                    <!-- Linux check requires a wildcare since it was not proeprly detecting all linux flavors -->
+                    <os name="linux*" />
                     <os family="windows" />
                 </or>
             </and>
@@ -1335,8 +1336,8 @@
         <ant dir="apps/i2psnark/java/" target="distclean" />
         <ant dir="apps/imagegen/" target="distclean" />
     </target>
-
-    <target name="pkg" depends="distclean, updater, preppkg, installer" />
+    <!-- Do not call installer , only installer 5 since installer wants to use izpack 4 which should no longer be used for java 25 -->
+    <target name="pkg" depends="distclean, updater, preppkg, installer5" />
 
     <target name="pkg200" depends="distclean, updater200, preppkg, installer" />
 
@@ -1989,20 +1990,21 @@
     </target>
 
     <!-- IzPack 4 -->
-    <target name="installer" depends="preppkg, buildProperties, izpack-patches, buildUtilityJar" >
-        <izpack input="${basedir}/installer/install.xml" output="${basedir}/install.tmp.jar" installerType="standard" basedir="${basedir}" />
+    <target name="installer" depends="preppkg, buildProperties, izpack5-patches, buildUtilityJar" >
+        <izpack input="${basedir}/installer/install.xml" output="${basedir}/install.tmp.jar" installerType="standard" basedir="${basedir}"  />
         <move file="${basedir}/install.tmp.jar" tofile="${basedir}/install.jar" />
+
         <ant target="installerexe" />
     </target>
 
     <!-- IzPack 5 -->
     <target name="ensureIzpack5" >
         <!-- set if unset -->
-        <property name="izpack5.home" value="${user.home}/IzPack" />
+        <property name="izpack5.home" value="${basedir}/installer/lib/izpack5/izpack"/>
         <condition property="izpack5.available" >
             <available file="${izpack5.home}" type="dir" />
         </condition>
-        <fail message="Error - IzPack 5.1.x must be installed at ${izpack5.home}, or set izpack5.home=/PATH/TO/IzPack in override.properties, or download from http://izpack.org/downloads/ and install" >
+        <fail message="Error - IzPack 5.2.x must be installed at ${izpack5.home}, or set izpack5.home=/PATH/TO/IzPack in override.properties, or download from http://izpack.org/downloads/ and install" >
             <condition>
                 <not>
                     <isset property="izpack5.available" />
