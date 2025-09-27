@@ -1997,14 +1997,20 @@
         <ant target="installerexe" />
     </target>
 
+    <target name="izpack-install">
+        <echo message="Running izpack instller...">
+        </echo>
+
+        <java jar="${basedir}/installer/lib/izpack5/izpack-installer.jar" fork="true" failonerror="true"/>
+    </target>
     <!-- IzPack 5 -->
     <target name="ensureIzpack5" >
         <!-- set if unset -->
-        <property name="izpack5.home" value="${basedir}/installer/lib/izpack5/izpack"/>
+        <property name="izpack5.home" value="${user.home}/IzPack"/>
         <condition property="izpack5.available" >
             <available file="${izpack5.home}" type="dir" />
         </condition>
-        <fail message="Error - IzPack 5.2.x must be installed at ${izpack5.home}, or set izpack5.home=/PATH/TO/IzPack in override.properties, or download from http://izpack.org/downloads/ and install" >
+        <fail message="Error - IzPack 5.2.x must be installed at ${izpack5.home}, or set izpack5.home=/PATH/TO/IzPack in override.properties, try ant izpack-install to install" >
             <condition>
                 <not>
                     <isset property="izpack5.available" />
